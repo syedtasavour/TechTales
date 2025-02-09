@@ -18,12 +18,11 @@ const uploadOnCloudinary = async (localFilePath) => {
 
     // Upload the file to Cloudinary under the "blog" folder with auto resource type detection
     const response = await cloudinary.uploader.upload(localFilePath, {
-      resource_type: "auto",
+      // resource_type: "auto",
       folder: "blog",
+      allowed_formats: ["jpg", "jpeg", "png", "webp"],
     });
 
-    // Log success message along with Cloudinary's response
-    console.log("file is uploaded on cloudinary ", response);
 
     // Delete the local file after successful upload
     fs.unlinkSync(localFilePath);
@@ -37,7 +36,13 @@ const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-// Export the uploadOnCloudinary function for use in other parts of the application
+
+
+// const destroyImageOnCloudinary = async(req , res , next)=>{
+
+// }
+
+
 export {
   uploadOnCloudinary,
 };
