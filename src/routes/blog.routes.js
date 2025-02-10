@@ -4,11 +4,11 @@ const router = Router();
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
+import { isBlogOwner } from "../middlewares/isOwner.middleware.js";
 
+import {createBlog, deleteBlog, getUserAllPublicBlogs, togglePublishStatus, updateBlog}  from "../controllers/blog.controller.js";
 
-import {createBlog}  from "../controllers/blog.controller.js";
-
-router.route("/create").post(
+router.route("/").post(verifyJWT,
   upload.fields([
     {
       name: "featureImage",
@@ -18,7 +18,12 @@ router.route("/create").post(
       name: "contentImages",
       maxCount: 10,
     },
-  ]),verifyJWT,createBlog
+  ]),createBlog
 );
+router.route("/author/").get(getUserAllPublicBlogs)
+router.route("/:permalink").get(verifyJWT,isBlogOwner,togglePublishStatus).patch(
+  verifyJWT,isBlogOwner,updateBlog
+).delete(verifyJWT,isBlogOwner,deleteBlog)
+
 
 export default router;

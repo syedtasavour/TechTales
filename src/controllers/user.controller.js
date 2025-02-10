@@ -51,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
     fs.unlinkSync(req.files.avatar[0].path);
     if (req.files?.coverImage?.[0]?.path)
       fs.unlinkSync(req.files.coverImage[0].path);
-    throw new ApiError(409, null, "user with email or username already exists");
+    throw new ApiError(409, null,"user with email or username already exists");
   }
 
   // Capture file paths for avatar and cover image
