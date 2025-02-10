@@ -60,11 +60,11 @@ const createBlog = asyncHandler(async (req, res) => {
   }
 
   const blogData = {};
-  if (title) blogData.title = title;
-  if (content) blogData.content = content;
+  blogData.title = title;
+  blogData.content = content;
   if (tags) blogData.tags = tags;
   if (isPublished) blogData.isPublished = isPublished;
-  if (permalink) blogData.permalink = permalink;
+  blogData.permalink = permalink;
   if (uploadedFeatureImage)
     blogData.featureImage = uploadedFeatureImage.secure_url;
   if (uploadedContentImageUrls.length > 0)
@@ -72,7 +72,10 @@ const createBlog = asyncHandler(async (req, res) => {
   if (req.user?._id) blogData.author = req.user._id;
 
   const blog = await Blog.create(blogData);
-
+  const author = await User.findById(req.user._id);
+  if (author.role === "reader") {
+    await User.updateOne({ role: "author" });
+  }
   return res
     .status(201)
     .json(new ApiResponse(201, blog, "Blog post created successfully!"));
@@ -117,7 +120,7 @@ const updateBlog = asyncHandler(async (req, res) => {
     isPublished,
     permalink: rawPermalink,
   } = req.body;
-  if (!title  && !content  && !tags  && !isPublished && !rawPermalink) {
+  if (!title && !content && !tags && !isPublished && !rawPermalink) {
     throw new ApiError(400, "At least one field must be provided for update.");
   }
 
@@ -135,6 +138,7 @@ const updateBlog = asyncHandler(async (req, res) => {
   }
 
   const blogData = {};
+  blogData.status = "pending"
   if (title) blogData.title = title;
   if (content) blogData.content = content;
   if (tags) blogData.tags = tags;
@@ -171,7 +175,7 @@ const updateBlog = asyncHandler(async (req, res) => {
 });
 
 const deleteBlog = asyncHandler(async (req, res) => {
-const blog = await Blog.findByIdAndDelete(req.blog);
+  const blog = await Blog.findByIdAndDelete(req.blog);
   return res
     .status(200)
     .json(new ApiResponse(200, blog, "Blog has been successfully deleted"));
@@ -206,10 +210,185 @@ const getUserAllPublicBlogs = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, blogs, "Blogs retrieved successfully."));
 });
 
+const getUserPrivateBlogs = asyncHandler(async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const blogsAggregate = Blog.aggregate([
+    {
+      $match: {
+        author: new mongoose.Types.ObjectId(req.user._id),
+        isPublished: false,
+      },
+    },
+  ]);
+
+  const options = {
+    page,
+    limit,
+  };
+
+  const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, blogs, "Blogs retrieved successfully."));
+});
+
+const getUserPendingBlogs = asyncHandler(async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const blogsAggregate = Blog.aggregate([
+    {
+      $match: {
+        author: new mongoose.Types.ObjectId(req.user._id),
+        status: "pending",
+      },
+    },
+  ]);
+
+  const options = {
+    page,
+    limit,
+  };
+
+  const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, blogs, "Blogs retrieved successfully."));
+});
+
+const getUserApprovedBlogs = asyncHandler(async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const blogsAggregate = Blog.aggregate([
+    {
+      $match: {
+        author: new mongoose.Types.ObjectId(req.user._id),
+        status: "approved",
+      },
+    },
+  ]);
+
+  const options = {
+    page,
+    limit,
+  };
+
+  const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, blogs, "Blogs retrieved successfully."));
+});
+
+const getUserRejectedBlogs = asyncHandler(async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const blogsAggregate = Blog.aggregate([
+    {
+      $match: {
+        author: new mongoose.Types.ObjectId(req.user._id),
+        status: "rejected",
+      },
+    },
+  ]);
+
+  const options = {
+    page,
+    limit,
+  };
+
+  const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, blogs, "Blogs retrieved successfully."));
+});
+const getUserPublicBlogs = asyncHandler(async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const blogsAggregate = Blog.aggregate([
+    {
+      $match: {
+        author: new mongoose.Types.ObjectId(req.user._id),
+        isPublished: true
+      },
+    },
+  ]);
+
+  const options = {
+    page,
+    limit,
+  };
+
+  const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, blogs, "Blogs retrieved successfully."));
+});
+
+const toggleApprovalStatus = asyncHandler(async(req,res)=>{
+    const {permalink, status} = req.body
+        // Change the approved button's name to "Approve" and set its value to "Approved"
+    if (status !== "pending" && status !== "approved" && status !== "rejected") {
+        throw new ApiError(
+          400,
+          "Invalid status provided. Only 'pending', 'approve', or 'rejected' values are allowed."
+        );
+      }
+      if(!permalink){
+        throw new ApiError(
+            400,
+            "Permalink is required to update the approval status of the post."
+          );
+      }
+
+      const blog  = await Blog.findOneAndUpdate(
+        {
+            permalink:permalink
+        },
+        {
+            $set: {status}
+        },
+        {
+            new: true,runValidators: true
+        }
+      )
+    return res
+      .status(201)
+      .json(new ApiResponse(201, blog, "Blog approval status updated successfully."));
+    
+
+})
+const getUserLiveBlogs = asyncHandler(async (req, res) => {
+    const {page = 1, limit = 10 } = req.query;
+    
+  
+    const blogsAggregate = Blog.aggregate([
+      {
+        $match: {
+          author: new mongoose.Types.ObjectId(req.user._id),
+          status: "approved",
+          isPublished: true,
+        },
+      },
+    ]);
+  
+    const options = {
+      page,
+      limit,
+    };
+  
+    const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
+  
+    return res
+      .status(200)
+      .json(new ApiResponse(200, blogs, "Blogs retrieved successfully."));
+  });
+  
+
 export {
   createBlog,
   togglePublishStatus,
   updateBlog,
   deleteBlog,
   getUserAllPublicBlogs,
+  toggleApprovalStatus,getUserPrivateBlogs,getUserPendingBlogs,getUserApprovedBlogs,getUserRejectedBlogs,getUserPublicBlogs,getUserLiveBlogs
 };

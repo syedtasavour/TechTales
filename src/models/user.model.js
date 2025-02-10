@@ -21,6 +21,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    bio: {
+      type: String,
+    },
     username: {
       type: String,
       required: true,
@@ -49,6 +52,11 @@ const userSchema = new Schema(
     },
     coverImage: {
       type: String, //Cloudinary
+    },
+    role: {
+      type: String,
+      enum: ["admin", "author" ,"reader"],
+      default: "reader",
     },
   },
   { timestamps: true }

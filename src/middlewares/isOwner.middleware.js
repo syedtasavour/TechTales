@@ -2,7 +2,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { Blog } from "../models/blog.models.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-const isBlogOwner = asyncHandler(async (req, res, next) => {
+const isBlogOwner = asyncHandler(async (req, _, next) => {
     const { permalink } = req.params;
     
     const blog = await Blog.findOne({ permalink: permalink });
