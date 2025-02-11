@@ -39,7 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
       (field) => field?.trim() === ""
     )
   ) {
-    throw new ApiError(400, null, "All fields are required");
+    throw new ApiError(400, "All fields are required");
   }
 
   // Check in database if user already exists
@@ -51,13 +51,13 @@ const registerUser = asyncHandler(async (req, res) => {
     fs.unlinkSync(req.files.avatar[0].path);
     if (req.files?.coverImage?.[0]?.path)
       fs.unlinkSync(req.files.coverImage[0].path);
-    throw new ApiError(409, null,"user with email or username already exists");
+    throw new ApiError(409,"user with email or username already exists");
   }
 
   // Capture file paths for avatar and cover image
   const avatarLocalPath = req.files?.avatar[0]?.path;
   if (!avatarLocalPath) {
-    throw new ApiError(400, null, "Avatar file is required");
+    throw new ApiError(400, "Avatar file is required");
   }
   let coverImageLocalPath;
   if (
@@ -72,7 +72,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const avatar = await uploadOnCloudinary(avatarLocalPath);
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
   if (!avatar) {
-    throw new ApiError(400, null, "Avatar file upload failed");
+    throw new ApiError(400,  "Avatar file upload failed");
   }
 
   // Create a new user record in the database
@@ -93,7 +93,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!createdUser) {
     throw new ApiError(
       500,
-      null,
+      
       "Something went wrong while registering the user"
     );
   }
@@ -178,12 +178,12 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     // Find user from token data
     const user = await User.findById(decodedToken?._id);
     if (!user) {
-      throw new ApiError(401, null,"Invalid refresh token");
+      throw new ApiError(401, "Invalid refresh token");
     }
 
     // Ensure token matches user's stored token
     if (incomingRefreshToken !== user.refreshToken) {
-      throw new ApiError(401,null, "Refresh token is expired or used");
+      throw new ApiError(401, "Refresh token is expired or used");
     }
 
     // Generate new tokens
@@ -204,7 +204,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       );
   } catch (error) {
     // Catch token errors
-    throw new ApiError(401,null, error?.message || "Invalid refresh token");
+    throw new ApiError(401, error?.message || "Invalid refresh token");
   }
 });
 
@@ -222,14 +222,14 @@ const passwordChange = asyncHandler(async (req, res) => {
 
   // Check if newPassword and confirmPassword are the same
   if (newPassword !== confirmPassword) {
-    throw new ApiError(401, null, "New password and confirm password must be same");
+    throw new ApiError(401,  "New password and confirm password must be same");
   }
 
   // Verify that the old password is correct using user's method
   const isPasswordValid = await user.isPasswordCorrect(oldPassword);
   // If the old password does not match, throw a 401 error
   if (!isPasswordValid) {
-    throw new ApiError(401, null, "Enter Correct Password");
+    throw new ApiError(401,  "Enter Correct Password");
   }
 
   // Update user's password with the new one
@@ -296,7 +296,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 
   // Confirm that the upload was successful
   if (!avatar) {
-    throw new ApiError(500, null, "Failed to upload the avatar image. Please try again later.");
+    throw new ApiError(500,  "Failed to upload the avatar image. Please try again later.");
   }
 
   // Update the user's avatar URL in the database and return the updated document
@@ -327,7 +327,7 @@ const updateCoverImage = asyncHandler(async (req, res) => {
 
   // Confirm that the upload was successful
   if (!coverImage) {
-    throw new ApiError(500, null, "Failed to upload the cover image. Please try again later.");
+    throw new ApiError(500,  "Failed to upload the cover image. Please try again later.");
   }
 
   // Update the user's cover image URL in the database and return the updated document

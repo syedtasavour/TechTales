@@ -340,7 +340,7 @@ const toggleApprovalStatus = asyncHandler(async (req, res) => {
   if (status !== "pending" && status !== "approved" && status !== "rejected") {
     throw new ApiError(
       400,
-      "Invalid status provided. Only 'pending', 'approved', or 'rejected' values are allowed."
+      `Invalid status provided ${status}. Only pending, approved, or rejected values are allowed`
     );
   }
   if (!permalink) {

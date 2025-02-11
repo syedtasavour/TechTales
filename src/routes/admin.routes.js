@@ -7,7 +7,7 @@ import { isAdmin } from "../middlewares/isAdmin.middleware.js";
 
 
 
-router.route("/blogs/pending").post(verifyJWT, isAdmin, toggleApprovalStatus);
+router.route("/blogs/status").post(verifyJWT, isAdmin, toggleApprovalStatus);
 
 
 export default router
