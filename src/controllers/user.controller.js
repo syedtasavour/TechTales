@@ -342,6 +342,8 @@ const updateCoverImage = asyncHandler(async (req, res) => {
     .json(new ApiResponse(202, updatedUser, "User cover image has been updated successfully"));
 });
 
+
+// The author page feature has been deprecated and removed.
 // const authorPage = asyncHandler(async(req,res)=>{
 //   const { username } = req.params;
 
