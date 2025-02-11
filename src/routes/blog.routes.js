@@ -9,10 +9,11 @@ import {
   createBlog,
   deleteBlog,
   togglePublishStatus,
-  updateBlog,
+  updateBlog,getUserAllPublicBlogs,
+  fetchBlogByPermalink
 } from "../controllers/blog.controller.js";
 
-
+router.route("/author").get(getUserAllPublicBlogs);
 router.route("/").post(
   verifyJWT,
   upload.fields([
@@ -29,9 +30,11 @@ router.route("/").post(
 );
 router
 .route("/:permalink")
-.get(verifyJWT, isBlogOwner, togglePublishStatus)
+.get(fetchBlogByPermalink)
 .patch(verifyJWT, isBlogOwner, updateBlog)
 .delete(verifyJWT, isBlogOwner, deleteBlog);
+
+router.route("/status/:permalink").get(verifyJWT, isBlogOwner, togglePublishStatus)
 // ------------------------------------------------------------
 
 export default router;
