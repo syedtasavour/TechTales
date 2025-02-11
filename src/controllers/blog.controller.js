@@ -181,34 +181,34 @@ const deleteBlog = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, blog, "Blog has been successfully deleted"));
 });
 
-const getUserAllPublicBlogs = asyncHandler(async (req, res) => {
-  const { author, page = 1, limit = 10 } = req.query;
-  const user = await User.findOne({ username: author }).select("_id");
-  if (!user || !user._id) {
-    throw new ApiError(404, null, "No user found with the provided username.");
-  }
+// const getUserAllPublicBlogs = asyncHandler(async (req, res) => {
+//   const { author, page = 1, limit = 10 } = req.query;
+//   const user = await User.findOne({ username: author }).select("_id");
+//   if (!user || !user._id) {
+//     throw new ApiError(404, null, "No user found with the provided username.");
+//   }
 
-  const blogsAggregate = Blog.aggregate([
-    {
-      $match: {
-        author: new mongoose.Types.ObjectId(user),
-        status: "approved",
-        isPublished: true,
-      },
-    },
-  ]);
+//   const blogsAggregate = Blog.aggregate([
+//     {
+//       $match: {
+//         author: new mongoose.Types.ObjectId(user),
+//         status: "approved",
+//         isPublished: true,
+//       },
+//     },
+//   ]);
 
-  const options = {
-    page,
-    limit,
-  };
+//   const options = {
+//     page,
+//     limit,
+//   };
 
-  const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
+//   const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, blogs, "Blogs retrieved successfully."));
-});
+//   return res
+//     .status(200)
+//     .json(new ApiResponse(200, blogs, "Blogs retrieved successfully."));
+// });
 
 const getUserPrivateBlogs = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
@@ -262,6 +262,7 @@ const getUserPendingBlogs = asyncHandler(async (req, res) => {
 
 const getUserApprovedBlogs = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
+  
   const blogsAggregate = Blog.aggregate([
     {
       $match: {
@@ -472,7 +473,7 @@ export {
   togglePublishStatus,
   updateBlog,
   deleteBlog,
-  getUserAllPublicBlogs,
+
   toggleApprovalStatus,
   getUserPrivateBlogs,
   getUserPendingBlogs,

@@ -256,10 +256,9 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
   // Extract account details from the request body
   const { fullName, username, email, number } = req.body;
 
-  // Validate that all required fields are provided
-  if (!fullName || !username || !email || !number) {
-    // If any field is missing, throw an error indicating that all fields are required
-    throw new ApiError(400, "All fields are required");
+  if (!fullName && !username && !email && !number) {
+    
+    throw new ApiError(400, "At least one field is required");
   }
 
   // Prepare the fields to update in the user's account

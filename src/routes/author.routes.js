@@ -7,7 +7,8 @@ import {
     getUserPublicBlogs,
     getUserPendingBlogs,
     getUserRejectedBlogs,
-    getUserLiveBlogs,getUserAllPublicBlogs } from "../controllers/blog.controller.js";
+    getUserLiveBlogs } from "../controllers/blog.controller.js";
+import { isBlogOwner } from "../middlewares/isOwner.middleware.js";
 
 
 //  author dashboard Routes
@@ -17,6 +18,7 @@ router.route("/live").get(verifyJWT, getUserLiveBlogs);
 router.route("/approved").get(verifyJWT, getUserApprovedBlogs);
 router.route("/pending").get(verifyJWT, getUserPendingBlogs);
 router.route("/rejected").get(verifyJWT, getUserRejectedBlogs);
+// router.route("/author").get(verifyJWT,getUserAllPublicBlogs);
 
 
 

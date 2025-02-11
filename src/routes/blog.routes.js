@@ -9,11 +9,11 @@ import {
   createBlog,
   deleteBlog,
   togglePublishStatus,
-  updateBlog,getUserAllPublicBlogs,
+  updateBlog,
   fetchBlogByPermalink
 } from "../controllers/blog.controller.js";
 
-router.route("/author").get(getUserAllPublicBlogs);
+
 router.route("/").post(
   verifyJWT,
   upload.fields([
