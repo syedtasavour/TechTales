@@ -2,19 +2,8 @@ import mongoose, { Schema } from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-/**
- * @typedef {Object} UserSchema
- * @property {string} fullName - The full name of the user (required)
- * @property {string} username - Unique username for the user (required)
- * @property {string} email - Unique email address of the user (required)
- * @property {number} number - Unique contact number of the user (required)
- * @property {string} password - User's password (required)
- * @property {string} refreshToken - Token used for authentication refresh
- * @property {string} avatar - Cloudinary URL for user's profile picture (required)
- * @property {string} coverImage - Cloudinary URL for user's cover image
- * @property {Date} createdAt - Timestamp of when the document was created
- * @property {Date} updatedAt - Timestamp of when the document was last updated
- */
+
+
 const userSchema = new Schema(
   {
     fullName: {

@@ -7,8 +7,7 @@ import slugify from "slugify";
 import fs from "fs";
 import { User } from "../models/user.model.js";
 import mongoose from "mongoose";
-// createBlog creates a new blog post with proper image uploads and slugified permalink.
-// It validates the request body, processes images, and stores the blog post in the database.
+import { Category } from "../models/category.model.js";
 const createBlog = asyncHandler(async (req, res) => {
   const {
     title,
@@ -16,6 +15,7 @@ const createBlog = asyncHandler(async (req, res) => {
     tags,
     isPublished,
     permalink: rawPermalink,
+    category:rawCategory,
   } = req.body;
 
   if (!title || !content || !isPublished) {
@@ -27,7 +27,19 @@ const createBlog = asyncHandler(async (req, res) => {
     });
     throw new ApiError(400, "All fields are required");
   }
-
+const category = await Category.findOne({name:rawCategory})
+if(category){
+  req.files.featureImage.forEach((file) => {
+    fs.unlinkSync(file.path); // Delete each uploaded image
+  });
+  req.files.contentImages.forEach((file) => {
+    fs.unlinkSync(file.path); // Delete each uploaded image
+  });
+  console.log('====================================');
+  console.log("hwew");
+  console.log('====================================');
+  throw new ApiError(400, "Please provide a valid category.");
+}
   // Process permalink using slugify on rawPermalink (if provided) or title.
   let permalink = rawPermalink
     ? slugify(rawPermalink, { lower: true, strict: true })
@@ -70,6 +82,7 @@ const createBlog = asyncHandler(async (req, res) => {
   if (uploadedContentImageUrls.length > 0)
     blogData.contentImages = uploadedContentImageUrls;
   if (req.user?._id) blogData.author = req.user._id;
+  if (category) blogData.category = category;
 
   const blog = await Blog.create(blogData);
   const author = await User.findById(req.user._id);
@@ -119,6 +132,7 @@ const updateBlog = asyncHandler(async (req, res) => {
     tags,
     isPublished,
     permalink: rawPermalink,
+    category,
   } = req.body;
   if (!title && !content && !tags && !isPublished && !rawPermalink) {
     throw new ApiError(400, "At least one field must be provided for update.");
@@ -144,6 +158,7 @@ const updateBlog = asyncHandler(async (req, res) => {
   if (tags) blogData.tags = tags;
   if (isPublished) blogData.isPublished = isPublished;
   if (permalink) blogData.permalink = permalink;
+  if (category) blogData.category = category;
   if (!blogData) {
     throw new ApiError(
       400,
@@ -180,35 +195,6 @@ const deleteBlog = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, blog, "Blog has been successfully deleted"));
 });
-
-// const getUserAllPublicBlogs = asyncHandler(async (req, res) => {
-//   const { author, page = 1, limit = 10 } = req.query;
-//   const user = await User.findOne({ username: author }).select("_id");
-//   if (!user || !user._id) {
-//     throw new ApiError(404, null, "No user found with the provided username.");
-//   }
-
-//   const blogsAggregate = Blog.aggregate([
-//     {
-//       $match: {
-//         author: new mongoose.Types.ObjectId(user),
-//         status: "approved",
-//         isPublished: true,
-//       },
-//     },
-//   ]);
-
-//   const options = {
-//     page,
-//     limit,
-//   };
-
-//   const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
-
-//   return res
-//     .status(200)
-//     .json(new ApiResponse(200, blogs, "Blogs retrieved successfully."));
-// });
 
 const getUserPrivateBlogs = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
@@ -262,7 +248,7 @@ const getUserPendingBlogs = asyncHandler(async (req, res) => {
 
 const getUserApprovedBlogs = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
-  
+
   const blogsAggregate = Blog.aggregate([
     {
       $match: {
@@ -444,9 +430,6 @@ const fetchBlogByPermalink = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  console.log("====================================");
-  console.log(blog);
-  console.log("====================================");
   if (!blog) {
     throw new ApiError(404, "Blog not found");
   }
@@ -466,14 +449,74 @@ const fetchBlogByPermalink = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, blog[0], "Blog retrieved successfully!"));
 });
 
+const fetchAllPublicBlogs = asyncHandler(async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const blogsAggregate = Blog.aggregate([
+    {
+      $match: {
+        status: "approved",
+        isPublished: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "categories", // Ensure correct collection name
+        localField: "category",
+        foreignField: "_id",
+        as: "category",
+        pipeline: [
+          {
+            $project: {
+              name: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "users", // Ensure correct collection name
+        localField: "author",
+        foreignField: "_id",
+        as: "author",
+        pipeline: [
+          {
+            $project: {
+              fullName: 1,
+            },
+          },
+        ],
+      },
+    },
+    { $unwind: { path: "$category", preserveNullAndEmptyArrays: true } },
+    { $unwind: { path: "$author", preserveNullAndEmptyArrays: true } },
+    // {
+    //   $project: {
 
+    //     category: 1,
+    //     author: 1,
+    //   },
+    // },
+  ]);
+
+  const options = {
+    page,
+    limit,
+  };
+
+  const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, blogs.docs, "public blogs retrieved successfully.")
+    );
+});
 
 export {
   createBlog,
   togglePublishStatus,
   updateBlog,
   deleteBlog,
-
   toggleApprovalStatus,
   getUserPrivateBlogs,
   getUserPendingBlogs,
@@ -482,4 +525,5 @@ export {
   getUserPublicBlogs,
   getUserLiveBlogs,
   fetchBlogByPermalink,
+  fetchAllPublicBlogs,
 };

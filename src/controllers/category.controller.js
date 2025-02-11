@@ -5,6 +5,8 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import slugify from "slugify";
 import fs from "fs";
 import { Category } from "../models/category.model.js";
+import mongoose from "mongoose";
+import { Blog } from "../models/blog.models.js";
 
 const createCategory = asyncHandler(async (req, res) => {
   const { name, description, permalink: rawPermalink } = req.body;
@@ -180,7 +182,7 @@ const updateCategoryImage = asyncHandler(async (req, res) => {
     },
     {
       image: image.secure_url,
-      status: "pending"
+      status: "pending",
     },
     {
       new: true,
@@ -198,13 +200,13 @@ const updateCategoryImage = asyncHandler(async (req, res) => {
 });
 const getCategory = asyncHandler(async (req, res) => {
   const { name } = req.params;
-  const category =await Category.aggregate([
+  const category = await Category.aggregate([
     {
-      $match:{
-        name:name
-      }
-    }
-  ])
+      $match: {
+        name: name,
+      },
+    },
+  ]);
 
   if (!category) {
     throw new ApiError(
@@ -222,5 +224,172 @@ const getCategory = asyncHandler(async (req, res) => {
       )
     );
 });
+const getApprovedCategory = asyncHandler(async (req, res) => {
+  const category = await Category.aggregate([
+    {
+      $match: {
+        status: "approved",
+      },
+    },
+  ]);
 
-export { createCategory, updateCategory, deleteCategory,toggleCategoryApproval,updateCategoryImage,getCategory };
+  if (!category) {
+    throw new ApiError(404, "Category not found. Please try again.");
+  }
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        category,
+        "Category status has been updated successfully."
+      )
+    );
+});
+
+const getPendingCategory = asyncHandler(async (req, res) => {
+  const category = await Category.aggregate([
+    {
+      $match: {
+        status: "pending",
+      },
+    },
+  ]);
+  if (!category) {
+    throw new ApiError(404, "Category not found. Please try again.");
+  }
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        category,
+        "Category status has been updated successfully."
+      )
+    );
+});
+const getRejectedCategory = asyncHandler(async (req, res) => {
+  const category = await Category.aggregate([
+    {
+      $match: {
+        status: "rejected",
+        author: mongoose.Types.ObjectId(req.user._id),
+      },
+    },
+  ]);
+  if (!category) {
+    throw new ApiError(404, "Category not found. Please try again.");
+  }
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        category,
+        "Category status has been updated successfully."
+      )
+    );
+});
+
+const getAllRejectedCategory = asyncHandler(async (req, res) => {
+  const category = await Category.aggregate([
+    {
+      $match: {
+        status: "rejected",
+      },
+    },
+  ]);
+  if (!category) {
+    throw new ApiError(404, "Category not found. Please try again.");
+  }
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        category,
+        "Category status has been updated successfully."
+      )
+    );
+});
+
+const fetchBlogsByCategory = asyncHandler(async (req, res) => {
+  const { category: rawCategory, page = 1, limit = 10 } = req.query;
+  // const category = req.query.category
+  const category = await Category.findOne({ name: rawCategory });
+  const blogsAggregate = Blog.aggregate([
+    {
+      $match: {
+        category: new mongoose.Types.ObjectId(category._id),
+        status: "approved",
+        isPublished: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "categories", // Ensure correct collection name
+        localField: "category",
+        foreignField: "_id",
+        as: "category",
+        pipeline: [
+          {
+            $project: {
+              name: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "users", // Ensure correct collection name
+        localField: "author",
+        foreignField: "_id",
+        as: "author",
+        pipeline: [
+          {
+            $project: {
+              fullName: 1,
+            },
+          },
+        ],
+      },
+    },
+    { $unwind: { path: "$category", preserveNullAndEmptyArrays: true } },
+    { $unwind: { path: "$author", preserveNullAndEmptyArrays: true } },
+
+    // {
+    //   $project: {
+
+    //     category: 1,
+    //     author: 1,
+    //   },
+    // },
+  ]);
+
+  const options = {
+    page,
+    limit,
+  };
+
+  const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, blogs.docs, "public blogs retrieved successfully.")
+    );
+});
+
+export {
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  toggleCategoryApproval,
+  updateCategoryImage,
+  getCategory,
+  getApprovedCategory,
+  getPendingCategory,
+  getRejectedCategory,
+  getAllRejectedCategory,
+  fetchBlogsByCategory,
+};

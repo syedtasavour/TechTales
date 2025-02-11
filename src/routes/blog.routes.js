@@ -10,10 +10,13 @@ import {
   deleteBlog,
   togglePublishStatus,
   updateBlog,
-  fetchBlogByPermalink
+  fetchBlogByPermalink,
+  fetchAllPublicBlogs
 } from "../controllers/blog.controller.js";
+import { fetchBlogsByCategory } from "../controllers/category.controller.js";
 
 
+router.route("/?category/").get(fetchBlogsByCategory)
 router.route("/").post(
   verifyJWT,
   upload.fields([
@@ -27,12 +30,13 @@ router.route("/").post(
     },
   ]),
   createBlog
-);
+).get(fetchAllPublicBlogs);
 router
 .route("/:permalink")
 .get(fetchBlogByPermalink)
 .patch(verifyJWT, isBlogOwner, updateBlog)
 .delete(verifyJWT, isBlogOwner, deleteBlog);
+
 
 router.route("/status/:permalink").get(verifyJWT, isBlogOwner, togglePublishStatus)
 // ------------------------------------------------------------

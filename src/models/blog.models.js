@@ -2,7 +2,6 @@ import mongoose, { Schema } from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 // const slugify = require("slugify");
 
-
 const blogSchema = new Schema(
   {
     permalink: {
@@ -46,6 +45,12 @@ const blogSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+    },
+
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Blog",
+      default: "67ab7e41095a5424d2dad5de"
     },
   },
   {
