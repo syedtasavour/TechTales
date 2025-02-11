@@ -2,7 +2,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import mongoose, { Aggregate } from "mongoose";
+// import mongoose, { Aggregate } from "mongoose";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import fs from "fs";
 import jwt from "jsonwebtoken";
