@@ -7,6 +7,7 @@
 ## Documentation & Resources
 
 - **Postman Collection:** [Postman Collection](backend.postman_collection.json)
+- **Flowchart** [Flowchart](flowchart.svg)
 - **API Base URL:** [http://localhost:3000/api/v1/](http://localhost:3000/api/v1/)
 - **GitHub Repository:** [Syed Tasavour](https://github.com/syedtasavour/TechTales)
 
