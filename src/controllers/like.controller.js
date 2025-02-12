@@ -77,6 +77,22 @@ const likeComment = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, like, "Comment liked successfully"));
 });
 
+const totalCommentLikes = asyncHandler(async (req, res) => {
+  const {commentId} = req.body
+  const totalLikes = await Like.aggregate([
+    {
+      $match: {
+        comment: new mongoose.Types.ObjectId(commentId),
+      },
+    },{
+        $count: "authorTotalLikes", // Counts the number of matching documents
+      },
+  ]);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, totalLikes[0], "Total likes fetched successfully"));
+});
 
 
-export { likeBlog, totalAuthorLikes,likeComment };
+export { likeBlog, totalAuthorLikes,likeComment,totalCommentLikes };
