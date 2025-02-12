@@ -11,7 +11,7 @@ import {
   togglePublishStatus,
   updateBlog,
   fetchBlogByPermalink,
-  fetchAllPublicBlogs,updateBlogFeatureImage,updateBlogContentImage
+  fetchAllPublicBlogs,updateBlogFeatureImage,updateBlogContentImage,fetchUserAllLiveBlogs
 } from "../controllers/blog.controller.js";
 import { fetchBlogsByCategory } from "../controllers/category.controller.js";
 
@@ -31,14 +31,15 @@ router.route("/").post(
   ]),
   createBlog
 ).get(fetchAllPublicBlogs);
+router.route("/author").get(fetchUserAllLiveBlogs)
 router
-.route("/:permalink")
+.route("/:permalink") 
 .get(fetchBlogByPermalink)
 .patch(verifyJWT, isBlogOwner, updateBlog)
 .delete(verifyJWT, isBlogOwner, deleteBlog);
 
 router.route("/feature-image/:permalink").patch(verifyJWT,isBlogOwner,upload.single("featureImage"),updateBlogFeatureImage)
-router.route("/content-image/:permalink").patch(verifyJWT,isBlogOwner,upload.fields([
+router.route("/content-images/:permalink").patch(verifyJWT,isBlogOwner,upload.fields([
   {
     name: "contentImages",
     maxCount: 10,

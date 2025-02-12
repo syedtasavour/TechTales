@@ -256,7 +256,7 @@ const updateBlogFeatureImage = asyncHandler(async (req, res) => {
   }
 
   await destroyImageOnCloudinary(req.blog_data.featureImage);
-  const updatedBlog = await Blog.findByIdAndDelete(
+  const updatedBlog = await Blog.findByIdAndUpdate(
     req.blog,
     {
       $set: { featureImage: featureImage.secure_url },
@@ -609,7 +609,72 @@ const fetchAllPublicBlogs = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(
-      new ApiResponse(200, blogs.docs, "public blogs retrieved successfully.")
+      new ApiResponse(200, blogs, "public blogs retrieved successfully.")
+    );
+});
+
+const fetchUserAllLiveBlogs = asyncHandler(async (req, res) => {
+  const { author, page = 1, limit = 10 } = req.query;
+  const user = await User.findOne({username:author}).select("_id")
+  const blogsAggregate = Blog.aggregate([
+    {
+      $match: {
+        author: new mongoose.Types.ObjectId(user),
+        status: "approved",
+        isPublished: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "categories", // Ensure correct collection name
+        localField: "category",
+        foreignField: "_id",
+        as: "category",
+        pipeline: [
+          {
+            $project: {
+              name: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "users", // Ensure correct collection name
+        localField: "author",
+        foreignField: "_id",
+        as: "author",
+        pipeline: [
+          {
+            $project: {
+              fullName: 1,
+            },
+          },
+        ],
+      },
+    },
+    { $unwind: { path: "$category", preserveNullAndEmptyArrays: true } },
+    { $unwind: { path: "$author", preserveNullAndEmptyArrays: true } },
+    // {
+    //   $project: {
+
+    //     category: 1,
+    //     author: 1,
+    //   },
+    // },
+  ]);
+
+  const options = {
+    page,
+    limit,
+  };
+
+  const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, blogs, "author blogs retrieved successfully.")
     );
 });
 
@@ -628,5 +693,5 @@ export {
   fetchBlogByPermalink,
   fetchAllPublicBlogs,
   updateBlogFeatureImage,
-  updateBlogContentImage,
+  updateBlogContentImage,fetchUserAllLiveBlogs
 };
