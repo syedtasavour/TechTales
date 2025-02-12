@@ -28,22 +28,22 @@ const isBlogOwner = asyncHandler(async (req, _, next) => {
   }
 
   req.blog = blog._id;
+  req.blog_data = blog;
   next();
 });
 const isAuthor = asyncHandler(async (req, _, next) => {
-  if (req.user.role !== "author" && req.user.role !== "admin" ) {
+  if (req.user.role !== "author" && req.user.role !== "admin") {
     throw new ApiError(
       401,
       "Unauthorized: This path is reserved exclusively for the author."
     );
   }
-  next()
- 
+  next();
 });
 
 const isCategoryOwner = asyncHandler(async (req, _, next) => {
-  const { name } = req.params;
-  const category = await Category.findOne({ name: name });
+  const { permalink } = req.params;
+  const category = await Category.findOne({ permalink: permalink });
   if (!category) {
     throw new ApiError(
       404,
@@ -67,7 +67,7 @@ const isCategoryOwner = asyncHandler(async (req, _, next) => {
 });
 const isCommentOwner = asyncHandler(async (req, _, next) => {
   const { commentId } = req.params;
-  const comment = await Comment.findById(commentId)
+  const comment = await Comment.findById(commentId);
   if (!comment) {
     throw new ApiError(
       404,
@@ -87,4 +87,4 @@ const isCommentOwner = asyncHandler(async (req, _, next) => {
   next();
 });
 
-export { isBlogOwner, isCategoryOwner,isAuthor,isCommentOwner };
+export { isBlogOwner, isCategoryOwner, isAuthor, isCommentOwner };
