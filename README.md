@@ -8,7 +8,7 @@ TechTales is a modern blogging platform providing a comprehensive RESTful API fo
 - **Documentation:** [TechTales Documentation](Documentation.md)
 - **Postman Collection:** [Postman Collection](backend.postman_collection.json)
 - **API Base URL:** [http://localhost:3000/api/v1/](http://localhost:3000/api/v1/)
-- **GitHub Repository:** [Syed Tasavour](https://github.com/syedtasavour/VidEngine)
+- **GitHub Repository:** [Syed Tasavour](https://github.com/syedtasavour/TechTales)
 
 
 ## 🌟 Show Your Support
