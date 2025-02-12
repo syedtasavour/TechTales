@@ -1,0 +1,2009 @@
+{
+	"info": {
+		"_postman_id": "5c1ae649-172f-420f-88f6-83af4db51b37",
+		"name": "Tech_Tales",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39181410"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fullName",
+									"value": "User full name",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "username",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "email@email.com",
+									"type": "text"
+								},
+								{
+									"key": "number",
+									"value": "1234567890",
+									"type": "text"
+								},
+								{
+									"key": "coverImage",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-eaa4-4630-9d59-fde704ca3dc3"
+								},
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-d1ec-4430-bf4c-f92db36a048b"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/users/register",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"email@email.com\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/users/login",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logoutUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/users/logout",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh-token",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/users/refresh-token",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change-password",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\": \"password\",\r\n    \"newPassword\": \"password\",\r\n    \"confirmPassword\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/users/change-password",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "current-user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\": \"password\",\r\n    \"newPassword\": \"password\",\r\n    \"confirmPassword\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/users/current-user",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								"current-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "account",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"new fullName\",\r\n    \"username\": \"new username\",\r\n    \"email\": \"new email\",\r\n    \"number\": 3434343\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/users/account",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "avatar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-d1ec-4430-bf4c-f92db36a048b"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/users/avatar",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								"avatar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cover-image",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "cover-image",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-eaa4-4630-9d59-fde704ca3dc3"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/users/cover-image",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								"cover-image"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "blogs",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "blog title here",
+									"type": "text"
+								},
+								{
+									"key": "permalink",
+									"value": "blog-permalink-here",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "blog content here",
+									"type": "text"
+								},
+								{
+									"key": "featureImage",
+									"type": "file",
+									"src": "postman-cloud:///1efe91d6-d6d2-4e90-9226-bdc1073cb383"
+								},
+								{
+									"key": "contentImages",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1efe91d7-ba35-45c0-acdd-f022dd7c521a",
+										"postman-cloud:///1efe91d7-b9fd-4350-85e5-8b06891cfbaf",
+										"postman-cloud:///1efe91d7-bb38-4260-9cef-fd50b9c34e3b"
+									]
+								},
+								{
+									"key": "isPublished",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "send category value by dropdown",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/blogs/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"blogs",
+								""
+							],
+							"query": [
+								{
+									"key": "permalink",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetchAllPublicBlogs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "featureImage",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-d1ec-4430-bf4c-f92db36a048b"
+								},
+								{
+									"key": "contentImages",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1efe1863-8bd6-4be0-91a3-e5e91c003256",
+										"postman-cloud:///1efdf7e4-eaa4-4630-9d59-fde704ca3dc3"
+									]
+								},
+								{
+									"key": "permalink",
+									"value": "permalink-here",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "content here",
+									"type": "text"
+								},
+								{
+									"key": "isPublished",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "title here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/blogs/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"blogs",
+								""
+							],
+							"query": [
+								{
+									"key": "permalink",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "togglePublishStatus",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isPublished\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/blogs/status/blog-permalink-here",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"blogs",
+								"status",
+								"blog-permalink-here"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateBlog",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"permalink\": \"permalink-here\",\r\n        \"title\": \"title here\",\r\n        \"content\": \"content here\"\r\n        // \"isPublished\": false\r\n        \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/blogs/blog-permalink-here",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"blogs",
+								"blog-permalink-here"
+							],
+							"query": [
+								{
+									"key": "permalink",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateBlogFeatureImage",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "featureImage",
+									"type": "file",
+									"src": "postman-cloud:///1efe91d6-d6d2-4e90-9226-bdc1073cb383"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/blogs/feature-image/blog-permalink-here",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"blogs",
+								"feature-image",
+								"blog-permalink-here"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateBlogContentImage",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "contentImages",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1efe91d7-ba35-45c0-acdd-f022dd7c521a",
+										"postman-cloud:///1efe91d7-b9fd-4350-85e5-8b06891cfbaf",
+										"postman-cloud:///1efe91d7-bb38-4260-9cef-fd50b9c34e3b"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/blogs/content-images/permalink-here",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"blogs",
+								"content-images",
+								"permalink-here"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteBlog",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/blogs/blog-permalink-here",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"blogs",
+								"blog-permalink-here"
+							],
+							"query": [
+								{
+									"key": "permalink",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetchBlogByPermalink",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/blogs/blog-permalink-here",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"blogs",
+								"blog-permalink-here"
+							],
+							"query": [
+								{
+									"key": "permalink",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetchUserAllLiveBlogs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "featureImage",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-d1ec-4430-bf4c-f92db36a048b"
+								},
+								{
+									"key": "contentImages",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1efe1863-8bd6-4be0-91a3-e5e91c003256",
+										"postman-cloud:///1efdf7e4-eaa4-4630-9d59-fde704ca3dc3"
+									]
+								},
+								{
+									"key": "permalink",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "content here",
+									"type": "text"
+								},
+								{
+									"key": "isPublished",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "title here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/blogs/author/public/?author=username&limit=10&page=1",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"blogs",
+								"author",
+								"public",
+								""
+							],
+							"query": [
+								{
+									"key": "author",
+									"value": "username"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetchAllPublicBlogs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/blogs/?page=1&limit=10",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"blogs",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetchBlogsByCategory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/blogs/category?page=1&limit=10&category=Uncategorized",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"blogs",
+								"category"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "category",
+									"value": "Uncategorized"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "dashboard",
+			"item": [
+				{
+					"name": "getUserPrivateBlogs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "featureImage",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-d1ec-4430-bf4c-f92db36a048b"
+								},
+								{
+									"key": "contentImages",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1efe1863-8bd6-4be0-91a3-e5e91c003256",
+										"postman-cloud:///1efdf7e4-eaa4-4630-9d59-fde704ca3dc3"
+									]
+								},
+								{
+									"key": "permalink",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "content here",
+									"type": "text"
+								},
+								{
+									"key": "isPublished",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "title here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/author/private",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"author",
+								"private"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserApprovedBlogs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "featureImage",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-d1ec-4430-bf4c-f92db36a048b"
+								},
+								{
+									"key": "contentImages",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1efe1863-8bd6-4be0-91a3-e5e91c003256",
+										"postman-cloud:///1efdf7e4-eaa4-4630-9d59-fde704ca3dc3"
+									]
+								},
+								{
+									"key": "permalink",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "content here",
+									"type": "text"
+								},
+								{
+									"key": "isPublished",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "title here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/author/approved",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"author",
+								"approved"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserPendingBlogs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "featureImage",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-d1ec-4430-bf4c-f92db36a048b"
+								},
+								{
+									"key": "contentImages",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1efe1863-8bd6-4be0-91a3-e5e91c003256",
+										"postman-cloud:///1efdf7e4-eaa4-4630-9d59-fde704ca3dc3"
+									]
+								},
+								{
+									"key": "permalink",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "content here",
+									"type": "text"
+								},
+								{
+									"key": "isPublished",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "title here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/author/pending",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"author",
+								"pending"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserRejectedBlogs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "featureImage",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-d1ec-4430-bf4c-f92db36a048b"
+								},
+								{
+									"key": "contentImages",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1efe1863-8bd6-4be0-91a3-e5e91c003256",
+										"postman-cloud:///1efdf7e4-eaa4-4630-9d59-fde704ca3dc3"
+									]
+								},
+								{
+									"key": "permalink",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "content here",
+									"type": "text"
+								},
+								{
+									"key": "isPublished",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "title here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/author/rejected",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"author",
+								"rejected"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserPublicBlogs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "featureImage",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-d1ec-4430-bf4c-f92db36a048b"
+								},
+								{
+									"key": "contentImages",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1efe1863-8bd6-4be0-91a3-e5e91c003256",
+										"postman-cloud:///1efdf7e4-eaa4-4630-9d59-fde704ca3dc3"
+									]
+								},
+								{
+									"key": "permalink",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "content here",
+									"type": "text"
+								},
+								{
+									"key": "isPublished",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "title here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/author/public",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"author",
+								"public"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserLiveBlogs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "featureImage",
+									"type": "file",
+									"src": "postman-cloud:///1efdf7e4-d1ec-4430-bf4c-f92db36a048b"
+								},
+								{
+									"key": "contentImages",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1efe1863-8bd6-4be0-91a3-e5e91c003256",
+										"postman-cloud:///1efdf7e4-eaa4-4630-9d59-fde704ca3dc3"
+									]
+								},
+								{
+									"key": "permalink",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "content here",
+									"type": "text"
+								},
+								{
+									"key": "isPublished",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "title here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/author/live",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"author",
+								"live"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "categories",
+			"item": [
+				{
+					"name": "createCategory",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Uncategorized",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "category description here",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "postman-cloud:///1efe92ad-cd17-4ef0-a625-2184c1f80e83"
+								},
+								{
+									"key": "permalink",
+									"value": "Uncategorized",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/category/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"category",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateCategory",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Uncategorized\",\r\n    \"permalink\": \"Uncategorized\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/category/uncategorized",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"category",
+								"uncategorized"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteCategory",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"updated name2\",\r\n    \"permalink\": \"updated-name2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/category/uncategorized",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"category",
+								"uncategorized"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateCategoryImage",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "postman-cloud:///1efe93d9-6d60-4520-8a8e-d8498593c111"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/category/image/uncategorized",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"category",
+								"image",
+								"uncategorized"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCategory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/category/uncategorized",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"category",
+								"uncategorized"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getApprovedCategory",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{server}}/category/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"category",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPendingCategory",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{server}}/category/pending",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"category",
+								"pending"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getRejectedCategory",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{server}}/category/rejected",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"category",
+								"rejected"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "like",
+			"item": [
+				{
+					"name": "likeBlog",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/like/blog-permalink-here",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"like",
+								"blog-permalink-here"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "totalAuthorLikes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/like/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"like",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "likeComment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/like/comment/67ac9aa7e9cba44fc16b0c8e",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"like",
+								"comment",
+								"67ac9aa7e9cba44fc16b0c8e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "totalCommentLikes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"commentId\": \"67ac9aa7e9cba44fc16b0c8e\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/like/comments",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"like",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "comment",
+			"item": [
+				{
+					"name": "blogComment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"comment here\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/comment/blog-permalink-here",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"comment",
+								"blog-permalink-here"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteComment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"comment here\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/comment/67ac9a8fe9cba44fc16b0c87",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"comment",
+								"67ac9a8fe9cba44fc16b0c87"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateComment",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"comment here updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/comment/67ac9aa7e9cba44fc16b0c8e",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"comment",
+								"67ac9aa7e9cba44fc16b0c8e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBlogComments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"comment here new\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/comment/blog-permalink-here",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"comment",
+								"blog-permalink-here"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserAllComments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"comment here new\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/comment/?page=1&limit=10",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"comment",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserPendingComments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"comment here new\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/comment/user/pending/?page=1&limit=10",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"comment",
+								"user",
+								"pending",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserRejectedComments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"comment here new\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/comment/user/rejected/?page=1&limit=10",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"comment",
+								"user",
+								"rejected",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "toggleBlogApprovalStatus",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `\r",
+									"<canvas id=\"lineChart\" height=\"200\"></canvas>\r",
+									"\r",
+									"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js\"></script> \r",
+									"\r",
+									"<script>\r",
+									"    var ctx = document.getElementById(\"lineChart\");\r",
+									"\r",
+									"    var lineChart = new Chart(ctx, {\r",
+									"        type: \"line\",\r",
+									"        data: {\r",
+									"            labels: [],\r",
+									"            datasets: [{\r",
+									"                data: [],\r",
+									"                label: 'Views',\r",
+									"                borderColor: \"#3e95cd\",\r",
+									"                fill: false\r",
+									"            }]\r",
+									"        },\r",
+									"        options: {\r",
+									"            legend: { display: false },\r",
+									"            title: {\r",
+									"                display: true,\r",
+									"                text: 'Blog Views Over Time'\r",
+									"            },\r",
+									"            scales: {\r",
+									"                xAxes: [{\r",
+									"                    display: true,\r",
+									"                    scaleLabel: {\r",
+									"                        display: true,\r",
+									"                        labelString: 'Date'\r",
+									"                    }\r",
+									"                }],\r",
+									"                yAxes: [{\r",
+									"                    display: true,\r",
+									"                    scaleLabel: {\r",
+									"                        display: true,\r",
+									"                        labelString: 'Views'\r",
+									"                    }\r",
+									"                }]\r",
+									"            }\r",
+									"        }\r",
+									"    });\r",
+									"\r",
+									"    pm.getData(function (err, value) {\r",
+									"        lineChart.data.datasets[0].data = [value.response.data.views];\r",
+									"        lineChart.data.labels = [value.response.data.createdAt];\r",
+									"        lineChart.update();\r",
+									"    });\r",
+									"\r",
+									"</script>`;\r",
+									"\r",
+									"function constructVisualizerPayload() {\r",
+									"    var res = pm.response.json();\r",
+									"    \r",
+									"    var visualizerData = {\r",
+									"        // Labels take an array of strings\r",
+									"        labels: [res.data.createdAt],\r",
+									"        \r",
+									"        // Data takes an array of numbers\r",
+									"        data: [res.data.views]\r",
+									"    };\r",
+									"\r",
+									"    return {response: visualizerData};\r",
+									"}\r",
+									"\r",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"permalink\":  \"blog-permalink-here\",\r\n    \"status\":  \"approved\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/admin/blogs/status",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"admin",
+								"blogs",
+								"status"
+							],
+							"query": [
+								{
+									"key": "permalink",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toggleCategoryApproval",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `\r",
+									"<canvas id=\"lineChart\" height=\"200\"></canvas>\r",
+									"\r",
+									"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js\"></script> \r",
+									"\r",
+									"<script>\r",
+									"    var ctx = document.getElementById(\"lineChart\");\r",
+									"\r",
+									"    var lineChart = new Chart(ctx, {\r",
+									"        type: \"line\",\r",
+									"        data: {\r",
+									"            labels: [],\r",
+									"            datasets: [{\r",
+									"                data: [],\r",
+									"                label: 'Views',\r",
+									"                borderColor: \"#3e95cd\",\r",
+									"                fill: false\r",
+									"            }]\r",
+									"        },\r",
+									"        options: {\r",
+									"            legend: { display: false },\r",
+									"            title: {\r",
+									"                display: true,\r",
+									"                text: 'Blog Views Over Time'\r",
+									"            },\r",
+									"            scales: {\r",
+									"                xAxes: [{\r",
+									"                    display: true,\r",
+									"                    scaleLabel: {\r",
+									"                        display: true,\r",
+									"                        labelString: 'Date'\r",
+									"                    }\r",
+									"                }],\r",
+									"                yAxes: [{\r",
+									"                    display: true,\r",
+									"                    scaleLabel: {\r",
+									"                        display: true,\r",
+									"                        labelString: 'Views'\r",
+									"                    }\r",
+									"                }]\r",
+									"            }\r",
+									"        }\r",
+									"    });\r",
+									"\r",
+									"    pm.getData(function (err, value) {\r",
+									"        lineChart.data.datasets[0].data = [value.response.data.views];\r",
+									"        lineChart.data.labels = [value.response.data.createdAt];\r",
+									"        lineChart.update();\r",
+									"    });\r",
+									"\r",
+									"</script>`;\r",
+									"\r",
+									"function constructVisualizerPayload() {\r",
+									"    var res = pm.response.json();\r",
+									"    \r",
+									"    var visualizerData = {\r",
+									"        // Labels take an array of strings\r",
+									"        labels: [res.data.createdAt],\r",
+									"        \r",
+									"        // Data takes an array of numbers\r",
+									"        data: [res.data.views]\r",
+									"    };\r",
+									"\r",
+									"    return {response: visualizerData};\r",
+									"}\r",
+									"\r",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":  \"Uncategorized\",\r\n    \"status\":  \"approved\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/admin/category/status",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"admin",
+								"category",
+								"status"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllRejectedCategory",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{server}}/admin/rejected",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"admin",
+								"rejected"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toggleCommentApprovalStatus",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"commentId\": \"67ac9aa7e9cba44fc16b0c8e\",\r\n    \"status\":  \"approved\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/admin/comments/pending",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"admin",
+								"comments",
+								"pending"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toggleCommentApprovalStatus Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"commentId\": \"67ac9aa7e9cba44fc16b0c8e\",\r\n    \"status\":  \"approved\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/admin/comments/pending",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"admin",
+								"comments",
+								"pending"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "search",
+			"item": [
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/search/?q=blog title here or blog content here",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"search",
+								""
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "blog title here or blog content here"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
