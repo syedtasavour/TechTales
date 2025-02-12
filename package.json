@@ -22,8 +22,16 @@
     "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js",
     "start": "node src/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syedtasavour/TechTales.git"
+  },
   "keywords": [],
-  "author": "",
+  "author": "Syed Tasavour",
+  "bugs": {
+    "url": "https://github.com/syedtasavour/TechTales.git"
+  },
+  "homepage": "https://github.com/syedtasavour/TechTales.git#readme",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^3.1.9",

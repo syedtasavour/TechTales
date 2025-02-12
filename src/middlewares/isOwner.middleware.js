@@ -3,6 +3,7 @@ import { Blog } from "../models/blog.models.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
 import { Category } from "../models/category.model.js";
+import { Comment } from "../models/comment.model.js";
 
 const isBlogOwner = asyncHandler(async (req, _, next) => {
   const { permalink } = req.params;
@@ -29,6 +30,16 @@ const isBlogOwner = asyncHandler(async (req, _, next) => {
   req.blog = blog._id;
   next();
 });
+const isAuthor = asyncHandler(async (req, _, next) => {
+  if (req.user.role !== "author" && req.user.role !== "admin" ) {
+    throw new ApiError(
+      401,
+      "Unauthorized: This path is reserved exclusively for the author."
+    );
+  }
+  next()
+ 
+});
 
 const isCategoryOwner = asyncHandler(async (req, _, next) => {
   const { name } = req.params;
@@ -54,5 +65,26 @@ const isCategoryOwner = asyncHandler(async (req, _, next) => {
   req.category = category._id;
   next();
 });
+const isCommentOwner = asyncHandler(async (req, _, next) => {
+  const { commentId } = req.params;
+  const comment = await Comment.findById(commentId)
+  if (!comment) {
+    throw new ApiError(
+      404,
+      "Comment not found - please check the provided id."
+    );
+  }
+  if (req.user.role === "admin") {
+    return next();
+  }
 
-export { isBlogOwner, isCategoryOwner };
+  if (req.user._id.toString() !== comment.commentBy._id.toString()) {
+    throw new ApiError(
+      401,
+      "Unauthorized: Only the category owner can access this resource."
+    );
+  }
+  next();
+});
+
+export { isBlogOwner, isCategoryOwner,isAuthor,isCommentOwner };
