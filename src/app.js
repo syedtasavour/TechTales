@@ -33,6 +33,7 @@ import adminRouter from "./routes/admin.routes.js";
 import categoryRoute from "./routes/category.routes.js";
 import  likeRoute  from "./routes/like.routes.js";
 import  commentRoute  from "./routes/comment.routes.js";
+import  searchRoute  from "./routes/search.routes.js";
 
 //routes declaration
 app.use("/api/v1/users", userRouter);
@@ -42,5 +43,6 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/category", categoryRoute);
 app.use("/api/v1/like", likeRoute);
 app.use("/api/v1/comment",commentRoute );
+app.use("/api/v1/search",searchRoute );
 
 export { app };
