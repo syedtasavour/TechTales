@@ -2,7 +2,10 @@ import { Blog } from "../models/blog.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import {
+  destroyImageOnCloudinary,
+  uploadOnCloudinary,
+} from "../utils/cloudinary.js";
 import slugify from "slugify";
 import fs from "fs";
 import { User } from "../models/user.model.js";
@@ -15,7 +18,7 @@ const createBlog = asyncHandler(async (req, res) => {
     tags,
     isPublished,
     permalink: rawPermalink,
-    category:rawCategory,
+    category: rawCategory,
   } = req.body;
 
   if (!title || !content || !isPublished) {
@@ -27,19 +30,16 @@ const createBlog = asyncHandler(async (req, res) => {
     });
     throw new ApiError(400, "All fields are required");
   }
-const category = await Category.findOne({name:rawCategory})
-if(category){
-  req.files.featureImage.forEach((file) => {
-    fs.unlinkSync(file.path); // Delete each uploaded image
-  });
-  req.files.contentImages.forEach((file) => {
-    fs.unlinkSync(file.path); // Delete each uploaded image
-  });
-  console.log('====================================');
-  console.log("hwew");
-  console.log('====================================');
-  throw new ApiError(400, "Please provide a valid category.");
-}
+  const category = await Category.findOne({ name: rawCategory });
+  if (category) {
+    req.files.featureImage.forEach((file) => {
+      fs.unlinkSync(file.path); // Delete each uploaded image
+    });
+    req.files.contentImages.forEach((file) => {
+      fs.unlinkSync(file.path); // Delete each uploaded image
+    });
+    throw new ApiError(400, "Please provide a valid category.");
+  }
   // Process permalink using slugify on rawPermalink (if provided) or title.
   let permalink = rawPermalink
     ? slugify(rawPermalink, { lower: true, strict: true })
@@ -190,6 +190,21 @@ const updateBlog = asyncHandler(async (req, res) => {
 });
 
 const deleteBlog = asyncHandler(async (req, res) => {
+  /*
+   If you prefer to retain images and allow users to manage their own media library,
+   you can tag each image with the user ID and create specific routes to fetch images based on ownership.
+   The code below deletes all associated images when a blog is removed.
+   comment or modify this section if you wish to preserve the images.
+  */
+  const oldContentImages = Array.isArray(req.blog_data.contentImages)
+    ? req.blog_data.contentImages
+    : [req.blog_data.contentImages];
+
+  for (const imagePath of oldContentImages) {
+    await destroyImageOnCloudinary(imagePath);
+  }
+  await destroyImageOnCloudinary(req.blog_data.featureImage);
+
   const blog = await Blog.findByIdAndDelete(req.blog);
   return res
     .status(200)
@@ -218,6 +233,92 @@ const getUserPrivateBlogs = asyncHandler(async (req, res) => {
     .status(200)
     .json(
       new ApiResponse(200, blogs, "User private blogs retrieved successfully.")
+    );
+});
+
+const updateBlogFeatureImage = asyncHandler(async (req, res) => {
+  const localImagePath = req.file.path;
+  if (!localImagePath) {
+    throw new ApiError(
+      400,
+      "Image file is required to update the feature image."
+    );
+  }
+
+  // We can retrieve the full user by updating the isOwner middleware to send the complete user instead of just the ID.
+  // const blog = await Blog.findById(req.blog);
+  const featureImage = uploadOnCloudinary(localImagePath);
+  if (!featureImage) {
+    throw new ApiError(
+      500,
+      "Something went wrong while uploading the file. Please check the format or if the image is allowed. Try again later."
+    );
+  }
+
+  await destroyImageOnCloudinary(req.blog_data.featureImage);
+  const updatedBlog = await Blog.findByIdAndDelete(
+    req.blog,
+    {
+      $set: { featureImage: featureImage.secure_url },
+    },
+    {
+      new: true,
+    }
+  );
+
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        updatedBlog,
+        "Blog feature image has been updated successfully."
+      )
+    );
+});
+const updateBlogContentImage = asyncHandler(async (req, res) => {
+  const contentImagePaths = req.files.contentImages
+    ? req.files.contentImages.map((file) => file.path)
+    : [];
+
+  let uploadedContentImageUrls = [];
+  for (const imagePath of contentImagePaths) {
+    const uploadedImage = await uploadOnCloudinary(imagePath);
+    uploadedContentImageUrls.push(uploadedImage.secure_url);
+  }
+  if (!uploadedContentImageUrls.length > 0) {
+    throw new ApiError(
+      500,
+      "Something went wrong while uploading the file. Please check the format or if the image is allowed. Try again later."
+    );
+  }
+
+  const oldContentImages = Array.isArray(req.blog_data.contentImages)
+    ? req.blog_data.contentImages
+    : [req.blog_data.contentImages];
+
+  for (const imagePath of oldContentImages) {
+    await destroyImageOnCloudinary(imagePath);
+  }
+
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    req.blog,
+    {
+      $set: { contentImages: uploadedContentImageUrls },
+    },
+    {
+      new: true,
+    }
+  );
+
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        updatedBlog,
+        "Blog feature image has been updated successfully."
+      )
     );
 });
 
@@ -526,4 +627,6 @@ export {
   getUserLiveBlogs,
   fetchBlogByPermalink,
   fetchAllPublicBlogs,
+  updateBlogFeatureImage,
+  updateBlogContentImage,
 };

@@ -6,8 +6,8 @@ import path from "path";
 // Configure cloudinary with environment variables
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // Your Cloudinary cloud name
-  api_key: process.env.CLOUDINARY_API_KEY,       // Your Cloudinary API key
-  api_secret: process.env.CLOUDINARY_API_SECRET,   // Your Cloudinary API secret
+  api_key: process.env.CLOUDINARY_API_KEY, // Your Cloudinary API key
+  api_secret: process.env.CLOUDINARY_API_SECRET, // Your Cloudinary API secret
 });
 
 // Async function to upload a file to Cloudinary and remove the local file afterward
@@ -23,7 +23,6 @@ const uploadOnCloudinary = async (localFilePath) => {
       allowed_formats: ["jpg", "jpeg", "png", "webp"],
     });
 
-
     // Delete the local file after successful upload
     fs.unlinkSync(localFilePath);
 
@@ -36,13 +35,26 @@ const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
+const destroyImageOnCloudinary = async (image) => {
+  try {
+    if (!image) return null;
+    let updatedImage = path.basename(image, path.extname(image));
+    // console.log(updatedImage);
 
-
-// const destroyImageOnCloudinary = async(req , res , next)=>{
-
-// }
-
-
-export {
-  uploadOnCloudinary,
+    const response = await cloudinary.uploader.destroy(`blog/${updatedImage}`);
+    // console.log(response);
+    return response;
+  } catch (error) {
+    return error;
+  }
 };
+
+// const deleteAllImages  = async (req, res) => {
+//   cloudinary.api
+//     .delete_all_resources({type: 'upload'})
+//     .then(result=>console.log(result));
+// };
+
+// deleteAllImages()
+
+export { uploadOnCloudinary, destroyImageOnCloudinary };

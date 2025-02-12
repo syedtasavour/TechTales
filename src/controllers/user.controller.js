@@ -3,7 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 // import mongoose, { Aggregate } from "mongoose";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { destroyImageOnCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 import fs from "fs";
 import jwt from "jsonwebtoken";
 
@@ -297,13 +297,16 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
   if (!avatar) {
     throw new ApiError(500,  "Failed to upload the avatar image. Please try again later.");
   }
-
+  const oldLink = await User.findById(req.user?._id)
+  await destroyImageOnCloudinary(oldLink.avatar)
   // Update the user's avatar URL in the database and return the updated document
   const updatedUser = await User.findByIdAndUpdate(
     req.user?._id,
     { avatar: avatar.secure_url },
     { new: true }
   ).select("-password -refreshToken");
+
+ 
 
   // Respond with a success status and the updated user information
   return res
@@ -328,7 +331,8 @@ const updateCoverImage = asyncHandler(async (req, res) => {
   if (!coverImage) {
     throw new ApiError(500,  "Failed to upload the cover image. Please try again later.");
   }
-
+  const oldLink = await User.findById(req.user?._id)
+  await destroyImageOnCloudinary(oldLink.coverImage)
   // Update the user's cover image URL in the database and return the updated document
   const updatedUser = await User.findByIdAndUpdate(
     req.user?._id,

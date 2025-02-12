@@ -1,7 +1,7 @@
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { destroyImageOnCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 import slugify from "slugify";
 import fs from "fs";
 import { Category } from "../models/category.model.js";
@@ -118,6 +118,8 @@ const deleteCategory = asyncHandler(async (req, res) => {
       "Something went wrong while deleting the category in the database"
     );
   }
+  // if you want to keep category image comment below line
+  await destroyImageOnCloudinary(category.image);
   return res
     .status(200)
     .json(new ApiResponse(200, category, "Category successfully deleted"));
@@ -164,7 +166,7 @@ const toggleCategoryApproval = asyncHandler(async (req, res) => {
     );
 });
 const updateCategoryImage = asyncHandler(async (req, res) => {
-  const { name } = req.params;
+  const { permalink } = req.params;
   if (!req.file.path) {
     throw new ApiError(
       400,
@@ -175,10 +177,10 @@ const updateCategoryImage = asyncHandler(async (req, res) => {
   if (!image) {
     throw new ApiError(500, "Something went wrong while uploading the image.");
   }
-
+  const oldImage = await Category.findOne({ permalink: permalink })
   const category = await Category.findOneAndUpdate(
     {
-      name: name,
+      permalink: permalink,
     },
     {
       image: image.secure_url,
@@ -188,13 +190,16 @@ const updateCategoryImage = asyncHandler(async (req, res) => {
       new: true,
     }
   );
+  // console.log(oldImage);
+  
+  await destroyImageOnCloudinary(oldImage.image)
   return res
     .status(201)
     .json(
       new ApiResponse(
         201,
         category,
-        "Category status has been updated successfully."
+        "Category image has been updated successfully."
       )
     );
 });
