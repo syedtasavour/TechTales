@@ -5,7 +5,11 @@ const likeSchema = new Schema({
     blog: {
         type: Schema.Types.ObjectId,
         ref: "Blog",
-        required: true
+        // required: true
+    },
+    comment: {
+        type: Schema.Types.ObjectId,
+        ref: "Comment",
     },
     likedBy: {
         type: Schema.Types.ObjectId,
