@@ -339,7 +339,9 @@ const getUserPendingBlogs = asyncHandler(async (req, res) => {
   };
 
   const blogs = await Blog.aggregatePaginate(blogsAggregate, options);
-
+  console.log('====================================');
+  console.log(blogs);
+  console.log('====================================');
   return res
     .status(200)
     .json(
@@ -531,9 +533,10 @@ const fetchBlogByPermalink = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  if (!blog) {
+  if (!blog.length > 0) {
     throw new ApiError(404, "Blog not found");
   }
+ 
 
   await Blog.findByIdAndUpdate(
     blog[0]._id,

@@ -50,7 +50,7 @@ const blogSchema = new Schema(
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Blog",
-      default: "67ab7e41095a5424d2dad5de"
+      default: "67ac9529fce67b5040bc81d9"
     },
   },
   {

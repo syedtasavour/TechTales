@@ -73,7 +73,7 @@ const updateCategory = asyncHandler(async (req, res) => {
     $or: [{ name: name }, { permalink: permalink }],
   });
 
-  if (existingCategory) {
+  if (existingCategory.length>0) {
     throw new ApiError(
       409,
       "Permalink and name must be unique; duplicate not allowed."
@@ -204,11 +204,11 @@ const updateCategoryImage = asyncHandler(async (req, res) => {
     );
 });
 const getCategory = asyncHandler(async (req, res) => {
-  const { name } = req.params;
+  const { permalink } = req.params;
   const category = await Category.aggregate([
     {
       $match: {
-        name: name,
+        permalink: permalink,
       },
     },
   ]);
@@ -278,7 +278,7 @@ const getRejectedCategory = asyncHandler(async (req, res) => {
     {
       $match: {
         status: "rejected",
-        author: mongoose.Types.ObjectId(req.user._id),
+        author: new mongoose.Types.ObjectId(req.user._id),
       },
     },
   ]);
