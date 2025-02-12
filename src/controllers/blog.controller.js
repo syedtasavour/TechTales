@@ -188,7 +188,7 @@ const updateBlog = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, blog, "Blog post updated successfully!"));
 });
-
+ 
 const deleteBlog = asyncHandler(async (req, res) => {
   /*
    If you prefer to retain images and allow users to manage their own media library,
