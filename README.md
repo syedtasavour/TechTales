@@ -172,6 +172,7 @@ For any queries or support:
 
 ---
 <div align="center">
-  <sub>Built with ❤️ by Syed Tasavour</sub>
+  <sub>Built with passion (and a lot of coffee) by Syed Tasavour.</sub>
 </div>
+
 
